@@ -1,13 +1,14 @@
+import { use } from 'marked';
 import { createContext, useState, useEffect } from 'react';
 
-export const CartContext = createContext();
+export const Context = createContext();
 
 const Cart = ({ children }) => {
   const getInitialCart = () => JSON.parse(localStorage.getItem('cart'));
-  const [cart, setCart] = useState();
+  const [cart, setCart] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // local storage not set yet so we can use useEffect for the first call of it
     const initialCart = getInitialCart();
     if (initialCart) {
       setCart(initialCart);
@@ -19,23 +20,30 @@ const Cart = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addItemToCart = (id, qty = 1) => {
-    const itemAlreadyInCart = cart.find((item) => item.id === id);
+  const openCart = () => {
+    setIsOpen(true);
+  };
 
-    if (itemAlreadyInCart) {
+  const closeCart = () => {
+    setIsOpen(false);
+  };
+
+  const addItemToCart = (product, qty = 1) => {
+    const item = cart.find((i) => i.id === product.id);
+
+    if (item) {
       // increase qty
-      itemAlreadyInCart.qty += qty;
+      item.qty += qty;
       setCart([...cart]);
     } else {
-      setCart([...cart, { id, qty }]);
+      setCart([...cart, { ...product, qty }]);
     }
   };
 
-  const removeItemFromCart = (id, qty) => {
+  const removeItemFromCart = (id) => {
     const newCart = cart.filter((item) => {
       return item.id !== id;
     });
-
     setCart(newCart);
   };
 
@@ -43,11 +51,12 @@ const Cart = ({ children }) => {
     cart,
     addItemToCart,
     removeItemFromCart,
+    openCart,
+    closeCart,
+    isOpen,
   };
 
-  return (
-    <CartContext.Provider value={exposed}>{children}</CartContext.Provider>
-  );
+  return <Context.Provider value={exposed}>{children}</Context.Provider>;
 };
 
 export default Cart;

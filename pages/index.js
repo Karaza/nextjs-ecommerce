@@ -34,7 +34,7 @@ const Price = styled.div`
 const renderProduct = (product, addItemToCart) => {
   const handleClick = (e) => {
     e.stopPropagation(); // because product card is a link to the product page
-    addItemToCart(product.id);
+    addItemToCart(product);
   };
 
   return (
