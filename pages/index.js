@@ -2,7 +2,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import matter from 'gray-matter';
 import styled from 'styled-components';
-import UnstyledLink from '../components/styled/UnstylesLink';
+import UnstyledLink from '../components/styled/UnstyledLink';
 import useCart from '../hooks/useCart';
 
 const ProductsContainer = styled.div`

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { FiX } from 'react-icons/fi';
 import useCart from '../hooks/useCart';
+import { useRouter } from 'next/router';
+import Button from './styled/Button';
 
 const Container = styled.div`
   position: fixed;
@@ -57,27 +59,17 @@ const Total = styled.p`
   font-size: 1.5rem;
 `;
 
-const Button = styled.button`
-  background: linear-gradient(to right, #c9d6ff, #e2e2e2);
-  font-size: 1.2rem;
-  color: inherit;
-  outline: none;
-  border: none;
-  width: 100%;
-  padding: 1rem;
-  text-transform: uppercase;
-  font-weight: bold;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const Cart = () => {
-  const { cart, isOpen, openCart, closeCart } = useCart();
+  const { cart, isOpen, closeCart, total } = useCart();
+  const router = useRouter();
 
   const handleClick = () => {
     closeCart();
+  };
+
+  const navigateToCheckout = () => {
+    closeCart();
+    router.push('/checkout');
   };
 
   return (
@@ -87,23 +79,29 @@ const Cart = () => {
       </XContainer>
       <Content>
         <Title>Cart</Title>
-        <List>
-          {cart.map((item) => {
-            return (
-              <Item key={item.id}>
-                <span>
-                  {item.qty}x {item.name}
-                </span>
-                <span>${item.price / 100}</span>
-              </Item>
-            );
-          })}
-        </List>
-        <Total>
-          <span>Total</span>
-          <span>$500</span>
-        </Total>
-        <Button>Checkout</Button>
+        {cart.length > 0 ? (
+          <>
+            <List>
+              {cart.map((item) => {
+                return (
+                  <Item key={item.id}>
+                    <span>
+                      {item.qty}x {item.name}
+                    </span>
+                    <span>${item.price / 100}</span>
+                  </Item>
+                );
+              })}
+            </List>
+            <Total>
+              <span>Total</span>
+              <span>${total / 100}</span>
+            </Total>
+            <Button onClick={navigateToCheckout}>Checkout</Button>
+          </>
+        ) : (
+          <p>Cart is empty</p>
+        )}
       </Content>
     </Container>
   );

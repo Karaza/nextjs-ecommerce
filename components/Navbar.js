@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import UnstyledLink from './styled/UnstylesLink';
+import UnstyledLink from './styled/UnstyledLink';
 import { FiShoppingCart } from 'react-icons/fi';
 import useCart from '../hooks/useCart';
 
