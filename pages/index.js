@@ -53,7 +53,6 @@ const renderProduct = (product, addItemToCart) => {
 
 const HomePage = (props) => {
   const { cart, addItemToCart } = useCart();
-  console.log(cart);
 
   return (
     <ProductsContainer>
